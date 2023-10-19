@@ -1,0 +1,76 @@
+﻿@model IEnumerable<NoteVm>
+@{
+    ViewData["title"] = "all notes";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" integrity="sha512-uKQ39gEGiyUJl4AI6L+ekBdGKpGw4xJ55+xyJG7YFlJokPNYegn9KwQ3P8A7aFQAUtUsAQHep+d/lrGqrbPIDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+    .contenir {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search {
+        box-shadow: 0px 0px 20px 1px #ffffff;
+        border: 0;
+        border-radius: 30px 0 0 30px;
+        padding: 0 10px 0 10px;
+        text-align: center;
+        color: black;
+        height: 50px;
+        width: 500px;
+        font-size: 25px;
+        font-weight: 1000;
+    }
+   .search::selection {
+        background-color: red;
+        color: white;
+   }
+   .search:focus {
+        border: 0;
+        outline: 0;
+   }
+   .search:hover {
+       cursor: text;
+   }
+
+    .colour-1 {
+        background: #483C46;
+        color: #fff;
+        padding: 10px 50px;
+    }
+</style>
+<a asp-area="User" asp-controller="Note" asp-action="create" class="btn btn-primary">Create a new Note</a>
+
+<div class="contenir">
+
+    <input type="text" class="search" id="search-inp" placeholder="Search...">
+
+    <button class="search-btn" id="search-inp-btn">&#x027A4;</button>
+
+</div>
+<div class="row row-flex">
+@foreach (var item in Model){
+
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="content colour-1">
+                <h3>@item.note.Name</h3>
+                <p>@item.note.Description</p>
+        </div>
+        <div>
+            <a asp-area="User" asp-controller="Note" asp-action="NoteView" asp-route-id="@item.note.Id" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>
+            <a asp-area="User" asp-controller="Note" asp-action="NoteEdit" asp-route-id="@item.note.Id" class="btn btn-primary"><i class="fa-solid fa-pen"></i></a>
+            <a asp-area="User" asp-controller="Note" asp-action="NoteDelete" asp-route-id="@item.note.Id" class="btn btn-primary"><i class="fa-solid fa-trash"></i></a>
+        </div>
+    </div>
+    
+ }
+    @if (Model.Count() == 0)
+    {
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <h1>there no data</h1>
+        </div>
+    }
+</div>

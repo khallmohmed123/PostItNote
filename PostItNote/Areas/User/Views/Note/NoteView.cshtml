@@ -1,0 +1,291 @@
+﻿@model NoteVm
+@{
+    ViewData["title"] = "Note data of " + Model.note.Name;
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" integrity="sha512-uKQ39gEGiyUJl4AI6L+ekBdGKpGw4xJ55+xyJG7YFlJokPNYegn9KwQ3P8A7aFQAUtUsAQHep+d/lrGqrbPIDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+    body{
+    background: #edf1f5;
+    margin-top:20px;
+}
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid transparent;
+    border-radius: 0;
+}
+.card {
+    margin-bottom: 30px;
+}
+.card-body {
+    flex: 1 1 auto;
+    padding: 1.57rem;
+}
+
+ .note-has-grid .nav-link {
+     padding: .5rem
+ }
+
+ .note-has-grid .single-note-item .card {
+     border-radius: 10px
+ }
+
+ .note-has-grid .single-note-item .favourite-note {
+     cursor: pointer
+ }
+
+ .note-has-grid .single-note-item .side-stick {
+     position: absolute;
+     width: 3px;
+     height: 35px;
+     left: 0;
+     background-color: rgba(82, 95, 127, .5)
+ }
+
+ .note-has-grid .single-note-item .category-dropdown.dropdown-toggle:after {
+     display: none
+ }
+
+ .note-has-grid .single-note-item .category [class*=category-] {
+     height: 15px;
+     width: 15px;
+     display: none
+ }
+
+ .note-has-grid .single-note-item .category [class*=category-]::after {
+     content: "\f0d7";
+     font: normal normal normal 14px/1 FontAwesome;
+     font-size: 12px;
+     color: #fff;
+     position: absolute
+ }
+
+ .note-has-grid .single-note-item .category .category-business {
+     background-color: rgba(44, 208, 126, .5);
+     border: 2px solid #2cd07e
+ }
+
+ .note-has-grid .single-note-item .category .category-social {
+     background-color: rgba(44, 171, 227, .5);
+     border: 2px solid #2cabe3
+ }
+
+ .note-has-grid .single-note-item .category .category-important {
+     background-color: rgba(255, 80, 80, .5);
+     border: 2px solid #ff5050
+ }
+
+ .note-has-grid .single-note-item.all-category .point {
+     color: rgba(82, 95, 127, .5)
+ }
+
+ .note-has-grid .single-note-item.note-business .point {
+     color: rgba(44, 208, 126, .5)
+ }
+
+ .note-has-grid .single-note-item.note-business .side-stick {
+     background-color: rgba(44, 208, 126, .5)
+ }
+
+ .note-has-grid .single-note-item.note-business .category .category-business {
+     display: inline-block
+ }
+
+ .note-has-grid .single-note-item.note-favourite .favourite-note {
+     color: #ffc107
+ }
+
+ .note-has-grid .single-note-item.note-social .point {
+     color: rgba(44, 171, 227, .5)
+ }
+
+ .note-has-grid .single-note-item.note-social .side-stick {
+     background-color: rgba(44, 171, 227, .5)
+ }
+
+ .note-has-grid .single-note-item.note-social .category .category-social {
+     display: inline-block
+ }
+
+ .note-has-grid .single-note-item.note-important .point {
+     color: rgba(255, 80, 80, .5)
+ }
+
+ .note-has-grid .single-note-item.note-important .side-stick {
+     background-color: rgba(255, 80, 80, .5)
+ }
+
+ .note-has-grid .single-note-item.note-important .category .category-important {
+     display: inline-block
+ }
+
+ .note-has-grid .single-note-item.all-category .more-options,
+ .note-has-grid .single-note-item.all-category.note-favourite .more-options {
+     display: block
+ }
+
+ .note-has-grid .single-note-item.all-category.note-business .more-options,
+ .note-has-grid .single-note-item.all-category.note-favourite.note-business .more-options,
+ .note-has-grid .single-note-item.all-category.note-favourite.note-important .more-options,
+ .note-has-grid .single-note-item.all-category.note-favourite.note-social .more-options,
+ .note-has-grid .single-note-item.all-category.note-important .more-options,
+ .note-has-grid .single-note-item.all-category.note-social .more-options {
+     display: none
+ }
+
+ @@media (max-width:767.98px) {
+     .note-has-grid .single-note-item {
+         max-width: 100%
+     }
+ }
+
+ @@media (max-width:991.98px) {
+     .note-has-grid .single-note-item {
+         max-width: 216px
+     }
+ }
+
+</style>
+<div class="container bootstrap snippets bootdeys">
+    <div class="row">
+        @foreach(var item in Model.Tickets)
+        {
+            <div class="tab-content bg-transparent" data-id="@(item.Id)" data-note_id="@item.Note_id" style="position:absolute;left:@(item.X)px;top:@(item.Y)px;width:@(item.Width)px;height:@(item.Height)px;background:@item.Color">
+                <div style="width:100%">
+                    <div class="dragbutton btn" style="display:none"><img style="width:15px;margin-top:5px" src="/images/drag.svg"></div>
+                    <input type="color" class="color" name="color" style="display:none">
+                    <div class="category-selector btn-group" >
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fa-solid fa-ellipsis fa-2xl"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a class="btn btn-primary modify">modify</a></li>
+                                <li><a class="btn btn-primary delete">delete</a></li>
+                                <li><a class="btn btn-primary save-state">save-state</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+               
+                <div id="note-full-container" class="note-has-grid row">
+                    <div class="single-note-item all-category note-important">
+                        <div class="card card-body" style="background-color:transparent">
+                            <span class="side-stick"></span>
+                            <h5 class="note-title text-truncate w-75 mb-0" data-noteheading="Launch new template">
+                                @Html.Raw(item.Title)
+                            </h5>
+                            <p class="note-date font-12 text-muted">21 January 2015</p>
+                            <div class="note-content">
+                                <p class="note-inner-content text-muted" data-notecontent="@Html.Raw(item.Description)">@Html.Raw(item.Description)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modify-container" style="display:none">
+                    <textarea class="title" placeholder="Enter note title">@Html.Raw(item.Title)</textarea>
+                    <textarea class="cnt" placeholder="Enter note description here">@Html.Raw(item.Description)</textarea>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script>
+    var noteZindex = 1;
+    $(document).on("click", ".delete",function(){
+        var card_id = $(this).parents(".tab-content.bg-transparent").data("id");
+        swal({
+            title: "Are you sure?",
+            text: "But you will still be able to retrieve this file.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, archive it!",
+            cancelButtonText: "No, cancel please!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+                    console.log(card_id)
+                    $.ajax({
+                        type: "POST",
+                        url: "/User/Note/delete_data_single",
+                        dataType: "json",
+                        data:{"ticket_id": card_id},
+                        success: function (response) {
+                            console.log(response);
+                        }
+                    })
+                } else {
+                    swal("Cancelled", "Your imaginary file is safe :)", "error");
+                }
+            });
+    })
+    $('.color').on('input propertychange', function () {
+        $(this).parents('.tab-content.bg-transparent').css("background", $(this).val())
+    });
+    $(document).ready(function(){
+            $(document).find('textarea').summernote();
+    })
+    $(document).on("click", ".modify", function () {
+        var card=$(this).parents(".tab-content.bg-transparent");
+        card.css("resize", "both").css("overflow", "auto");
+        $(this).parents(".tab-content.bg-transparent")
+            .draggable({ containment: "document", handle: '.dragbutton', disabled: false })
+            .on('dragstart',
+                function () {
+                    $(this).css('z-index', ++noteZindex);
+                });
+        card.find(".dragbutton").css("display", "inline-block")
+        card.find(".modify-container").css("display", "block")
+        card.find("#note-full-container").css("display", "none")
+        card.find(".color").css("display", "inline-block")
+    })
+    $(document).on("click", ".save-state",function(){
+        var card = $(this).parents(".tab-content.bg-transparent");
+        card.css("resize", "").css("overflow", "");
+        card.draggable({ disabled: true });
+        card.find(".dragbutton").css("display", "none")
+        card.find(".modify-container").css("display", "none")
+        card.find("#note-full-container").css("display", "block")
+        card.find(".note-title").html(card.find('.title').summernote('code'))
+        card.find(".note-content").html(card.find('.cnt').summernote('code'))
+        card.find(".color").css("display","none")
+        var id=card.data("id")
+        var Note_id = card.data("note_id")
+        let element = card[0];
+        let x = element.offsetLeft;
+        let y = element.offsetTop;
+        let width = element.offsetWidth;
+        let height = element.offsetHeight;
+        var note_tickets={
+            "X": x,
+            "Y": y,
+            "Height": height,
+            "Width": width,
+            "Color": $(element).css("background"),
+            "Title": $(element).find('.title').summernote('code'),
+            "Description": $(element).find('.cnt').summernote('code'),
+            "Id": id,
+            "Note_id": Note_id
+        }
+        $.ajax({
+            type: "POST",
+            url: "/User/Note/create_data_single",
+            dataType: "json",
+            data: JSON.stringify(note_tickets),
+            success: function (response) {
+                console.log(response);
+            }
+        })
+    })
+</script>

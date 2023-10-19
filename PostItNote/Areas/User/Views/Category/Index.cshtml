@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Category>
+@{
+    ViewData["title"] = "User Categories";
+}
+<a asp-area="User" asp-controller="Category" asp-action="create" class="btn btn-primary">Create a new Category</a>
+<table id="example" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>Action</th>
+         </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>
+                    <a href="/User/Category/update?id=@item.Id" class="btn btn-outline-primary">Edit</a>
+                    <a href="/User/Category/delete?id=@item.Id" class="btn btn-outline-primary">Delete</a>
+                </td>
+            </tr>
+        }
+        @if (Model.Count()==0)
+        {
+            <tr>
+                <td><h1 style="text-align:center;">there is not data</h1></td>
+            </tr>
+        }
+    </tbody>
+</table>

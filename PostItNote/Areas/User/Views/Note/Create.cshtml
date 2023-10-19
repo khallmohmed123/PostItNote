@@ -1,0 +1,115 @@
+﻿@model IEnumerable<SelectListItem>
+@{
+    ViewData["title"] = "Create Note";
+}
+<link rel="stylesheet" href="~/css/note.css"/>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.31/dist/sweetalert2.min.css" rel="stylesheet">
+<a href="javascript:;" class="button" id="add_new">Add New Note</a>
+<button class="btn btn-primary save-note-data" > Save</button>
+<div id="board">
+</div>
+<div id="my-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Modal</h2>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="formGroupInputSmall">Note Title</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="text" id="formGroupInputSmall" placeholder="Note Title">
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="formGroupInputDes">Note Description</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" rows="3" id="formGroupInputDes"></textarea>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label for="CategoryId">category</label>
+                    <select asp-items="@Model" class="form-control">
+                        <option disabled selected value="-1">--select category--</option>
+                    </select>
+                    <div class="bg-warning category-error" aria-describedby="sizing-addon1"></div>
+                </div>
+                <a href="javascript:;" class="btn btn-primary save_every_thing" >save</a>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/js/note.js" asp-append-version="true"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script> 
+    const modal = document.querySelector('#my-modal');
+    const modalBtn = document.querySelector('.save-note-data');
+    const closeBtn = document.querySelector('.close');
+    // Events
+    modalBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', outsideClick);
+    // Open
+    function openModal() {
+        modal.style.display = 'block';
+    }
+    // Close
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+    // Close If Outside Click
+    function outsideClick(e) {
+        if (e.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+    $(".save_every_thing").on("click",function(){
+        var selected_category = $('select').find(":selected").val();
+        if(selected_category<0){
+            $(".category-error").text("you must choose category")
+            return;
+        }
+        var note_tickets=Array();
+        $(".note").each(function (i, obj) {
+            let element = this;
+            let x = element.offsetLeft;
+            let y = element.offsetTop;
+            let width = element.offsetWidth;
+            let height = element.offsetHeight;
+            $(this).data("x",x);
+            $(this).data("y",y);
+            $(this).data("height", height);
+            $(this).data("width", width);
+            $(this).data("color", $(element).css("background"));
+            note_tickets.push({
+                "X": x,
+                "Y": y,
+                "Height": height,
+                "Width": width,
+                "Color": $(element).css("background"),
+                "Title": $(this).find('.title').summernote('code'),
+                "Description": $(this).find('.cnt').summernote('code')
+            })
+        })
+        .promise().done(function(){
+            $.ajax({
+                type: "POST",
+                url: "/User/Note/create_data",
+                dataType: "json",
+                data: JSON.stringify({
+                    "Tickets": note_tickets,
+                    "note":{
+                        "Name": $("#formGroupInputSmall").val(),
+                        "Description": $("#formGroupInputDes").val(),
+                        "Category_id": selected_category
+                    }
+                }),
+                success:function(response)
+                {
+                    console.log(response);
+                }
+            })
+        });
+    })
+</script>

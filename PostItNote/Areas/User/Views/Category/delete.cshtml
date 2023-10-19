@@ -1,0 +1,19 @@
+﻿@model Category
+@{
+    ViewData["title"] = "Delete category " + Model.Name; 
+}
+
+<form method="post">
+    <div class="row">
+        <div class="col-12">
+            <input disabled asp-for="Name" class=" form-control" placeholder="Category name" aria-label="Category name">
+            <input hidden asp-for="Name" class=" form-control" placeholder="Category name" aria-label="Category name">
+            <input hidden asp-for="user_id" class=" form-control" placeholder="Category name" aria-label="Category name">
+            <input hidden asp-for="Id" class=" form-control" placeholder="Category name" aria-label="Category name">
+        </div>
+        <div class="col-12 pt-3">
+            <a asp-area="User" asp-controller="Category" asp-action="Index" class="btn btn-outline-primary">Back</a>
+            <button type="submit" class="btn btn-outline-primary">submit</button>
+        </div>
+    </div>
+</form>

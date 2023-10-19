@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model Category
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["title"] = "Update user Category " + UserManager.GetUserName(User);
+}
+<form method="post">
+    <div class="row">
+        <div class="col-12">
+            <input asp-for="Name" class=" form-control" placeholder="Category name" aria-label="Category name">
+        </div>
+        <div class="col-12">
+            <input asp-for="user_id" hidden value="@User.Claims.First().Value" class=" form-control">
+        </div>
+        <div class="col-12 pt-3">
+            <a asp-area="User" asp-controller="Category" asp-action="Index" class="btn btn-outline-primary">Back</a>
+            <button type="submit" class="btn btn-outline-primary">submit</button>
+        </div>
+    </div>
+</form>
